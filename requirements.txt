@@ -1,0 +1,14 @@
+numpy>=1.24
+soundcard>=0.4.6
+sounddevice>=0.4.6
+pyaudiowpatch>=0.2.12
+keyboard>=0.13.5
+mouse>=0.7.1
+mss>=9.0.0
+Pillow>=10.0
+imageio>=2.31
+imageio-ffmpeg>=0.4.8
+faster-whisper>=1.0
+torch>=2.0
+# Optional: AMD GPU training acceleration on Windows (experimental, not required)
+# torch-directml>=0.2.0

@@ -1,0 +1,79 @@
+{
+  "sample_rate": 48000,
+  "block_size": 2048,
+  "bands": { "low": [60, 500], "mid": [500, 4000], "high": [4000, 10000] },
+  "onset": {
+    "floor_ratio": 3.0,
+    "quiet_ratio": 1.8,
+    "quiet_low_ratio_min": 0.25,
+    "min_low": 1e-7,
+    "min_full": 1e-6,
+    "cooldown_ms": 220,
+    "floor_alpha": 0.05
+  },
+  "masking": { "gunshot_suppress_ms": 1000 },
+  "hotkey_mask": {
+    "_comment": "防线1热键掩蔽：低级键盘钩子(WH_KEYBOARD_LL，用户态最底层，游戏全屏也收得到)读到这些键，随后 window 秒内的事件标为 self。WASD 覆盖自己脚步，鼠标左键覆盖开火，R/B 换弹切模式，Q/123 切枪，4/5 打药，C/空格蹲跳，X 开技能（技能期间大脚步全是自己，window 给足 6s）。键位不符就在这改",
+    "enabled": true,
+    "keys": {
+      "r": { "label": "reload", "window": 2.0 },
+      "b": { "label": "fire_mode", "window": 0.5 },
+      "w": { "label": "move", "window": 0.3 },
+      "a": { "label": "move", "window": 0.3 },
+      "s": { "label": "move", "window": 0.3 },
+      "d": { "label": "move", "window": 0.3 },
+      "q": { "label": "swap_weapon", "window": 0.25 },
+      "1": { "label": "slot1", "window": 0.25 },
+      "2": { "label": "slot2", "window": 0.25 },
+      "3": { "label": "slot3", "window": 0.25 },
+      "4": { "label": "heal", "window": 2.0 },
+      "5": { "label": "heal", "window": 2.0 },
+      "c": { "label": "crouch", "window": 0.2 },
+      "space": { "label": "jump", "window": 0.3 },
+      "x": { "label": "skill", "window": 12.0 },
+      "shift": { "label": "sprint", "window": 1.0 },
+      "z": { "label": "prone", "window": 0.5 }
+    },
+    "hold_labels": ["move", "fire", "sprint", "prone"],
+    "latch_labels": ["move"],
+    "latch_s": 1.5,
+    "_latch_comment": "点按型移动闩锁：移动键点按后 1.5s 内持续标 self（用户极速点按微操，按住直读扑空率高），按键重复触发顺延",
+    "mouse": {
+      "_comment": "鼠标键掩蔽（需 pip install mouse）：开火和点击几乎同时，0.3s 足够",
+      "left": { "label": "fire", "window": 0.3 }
+    }
+  },
+  "self_voiceprint": {
+    "_comment": "防线3自身声纹库：2026-09-27 真机标定结论——12频带80ms指纹对大类声音（脚步/换弹/枪声）不可分（敌步到换弹指纹 d=0.04），默认停用；代码保留，v0.2 换更高分辨率特征再试。自己的声音现由 热键掩蔽(WASD/R/B/鼠标左键)+规则层 覆盖",
+    "enabled": false,
+    "lib": "samples/self/library.json",
+    "thresh": 0.30
+  },
+  "output": {
+    "_comment": "输出层过滤：show_self=false 时自己发出的声音不在面板/控制台显示（事件仍带 self 标记落盘，是分类器负样本）",
+    "show_self": false
+  },
+  "classify": {
+    "_comment_knn": "learn.py 训练的 k-NN 模型（tool/learn.py）。v1 保守：只在高置信(≥0.9)时判人机脚步，预测写进事件 knn 字段",
+    "knn_model": "samples/model/knn.json",
+    "mono_corr_max": 0.95,
+    "gun_full_min": 1e-3,
+    "gun_high_min": 1e-5,
+    "glass_high_ratio": 0.30,
+    "glass_high_mid": 2.0
+  },
+  "distance_ceilings": {
+    "_comment": "官方可闻距离上界（samples/reference/sound-distances.md）：听到=人在该距离内",
+    "action": 29,
+    "glass": 52
+  },
+  "proximity": {
+    "near_low": 5e-5,
+    "mid_low": 5e-6
+  },
+  "tracker": {
+    "ema": 0.35,
+    "presence_ttl_ms": 1500,
+    "angle_max_deg": 80
+  }
+}

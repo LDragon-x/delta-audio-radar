@@ -1,0 +1,23 @@
+# Private data — never commit
+sessions/
+samples/
+data/
+deliverables/
+state/*.json
+*.wav
+*.pt
+*.onnx
+*.npy
+*.npz
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+*.egg-info/
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
